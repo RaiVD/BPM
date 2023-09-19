@@ -1,2 +1,4 @@
-package org.example.fase1.desafioTres;public class Algoritmo {
+package org.example.fase1.desafioTres;
+
+public class Algoritmo {
 }

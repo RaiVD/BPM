@@ -4,23 +4,33 @@ import java.util.Scanner;
 
 public class ConsumaMedioCombustivel {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        boolean entrada = false;
 
-        try {
-            System.out.print("Qual a distância total percorrida (em Km): ");
-            int distancia = scanner.nextInt();
+        while (!entrada) {
+            try {
+                int distancia = ValidInput.readIntFromUser("Qual a distância total percorrida (em Km): ");
+                double combustivel = ValidInput.readDoubleFromUser("Qual o total de combustível consumido (um digito após o ponto): ");
 
-            System.out.print("Qual o total de combustível consumido (em litro): ");
-            double combustivel = scanner.nextDouble();
+                ConsumoMedioService service = new ConsumoMedioService();
+                double mediaConsumo = service.calcularConsumoMedio(distancia, combustivel);
 
-            if(distancia < 0 || combustivel < 0){
-                System.out.println("A distÂncia e o combustivel não pode ser inferior a 0!");
-            }else {
-                double mediaConsumo = distancia / combustivel;
                 System.out.printf("O consumo médio do automóvel é: %.3f km/l%n", mediaConsumo);
+                entrada = true;
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida. Certifique-se de digitar um número inteiro ou real válido.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (java.util.InputMismatchException e) {
-            System.out.println("Entrada inválida. Certifique-se de digitar um número inteiro.");
         }
     }
 }
+
+class ConsumoMedioService {
+    public double calcularConsumoMedio(int distancia, double combustivel) {
+        if (distancia < 0 || combustivel <= 0) {
+            throw new IllegalArgumentException("A distância e o combustível não podem ser menores ou iguais a zero.");
+        }
+        return distancia / combustivel;
+    }
+}
+
